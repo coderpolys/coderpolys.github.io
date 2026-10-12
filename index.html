@@ -3,86 +3,277 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>yaaertu codeR — Portfolyo</title>
-  <meta name="description" content="AI ile üretilmiş sinematik videolar, logo sistemleri ve marka varlıkları. yaaMovie, Poly Desk OG." />
-  <link rel="stylesheet" href="style.css" />
+  <title>yaaertu — Proje Vitrini</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --ink: #0a0e0c;
+      --paper: #f0ebe0;
+      --amber: #e2a23a;
+      --teal: #3d9b86;
+      --danger: #e85d4c;
+      --mono: "JetBrains Mono", monospace;
+      --sans: "Inter", system-ui, sans-serif;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--ink);
+      color: var(--paper);
+      font-family: var(--sans);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+    /* LOGIN */
+    #login {
+      position: fixed; inset: 0; z-index: 100;
+      background: radial-gradient(ellipse at center, #101614 0%, #050807 70%);
+      display: flex; align-items: center; justify-content: center;
+      transition: opacity .6s, visibility .6s;
+    }
+    #login.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+    .login-box {
+      background: rgba(16,22,20,.85);
+      border: 1px solid rgba(226,162,58,.25);
+      border-radius: 12px;
+      padding: 48px 40px;
+      width: 420px;
+      max-width: 92vw;
+      box-shadow: 0 0 60px rgba(61,155,134,.15), inset 0 0 20px rgba(226,162,58,.05);
+      position: relative;
+      overflow: hidden;
+    }
+    .login-box::before {
+      content: ""; position: absolute; inset: 0;
+      background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(61,155,134,.03) 2px, rgba(61,155,134,.03) 4px);
+      pointer-events: none;
+    }
+    .glitch {
+      font-family: var(--mono); font-size: 28px; font-weight: 700;
+      text-align: center; margin-bottom: 8px; letter-spacing: 2px;
+      color: var(--amber); text-shadow: 0 0 10px var(--amber);
+      animation: glitch 2.5s infinite;
+    }
+    @keyframes glitch {
+      0%, 90%, 100% { transform: translate(0); }
+      92% { transform: translate(-2px, 1px); }
+      94% { transform: translate(2px, -1px); }
+      96% { transform: translate(-1px, 2px); }
+    }
+    .sub { text-align: center; font-family: var(--mono); font-size: 11px; color: var(--teal); letter-spacing: 3px; margin-bottom: 32px; }
+    .field { margin-bottom: 18px; position: relative; }
+    .field label { display: block; font-family: var(--mono); font-size: 11px; color: #8a8a7a; margin-bottom: 6px; letter-spacing: 1px; }
+    .field input {
+      width: 100%; background: rgba(0,0,0,.5); border: 1px solid rgba(61,155,134,.4);
+      color: var(--paper); font-family: var(--mono); font-size: 15px;
+      padding: 12px 14px 12px 42px; border-radius: 6px; outline: none;
+      transition: border .2s, box-shadow .2s;
+    }
+    .field input:focus { border-color: var(--amber); box-shadow: 0 0 0 3px rgba(226,162,58,.15); }
+    .field .icon { position: absolute; left: 14px; top: 36px; color: var(--teal); font-size: 16px; }
+    .btn-login {
+      width: 100%; background: linear-gradient(90deg, var(--teal), #2a7a68);
+      color: #fff; border: none; padding: 14px; font-family: var(--mono);
+      font-weight: 700; letter-spacing: 1px; border-radius: 6px; cursor: pointer;
+      margin-top: 8px; transition: transform .15s, box-shadow .15s;
+    }
+    .btn-login:hover { transform: translateY(-1px); box-shadow: 0 8px 25px rgba(61,155,134,.4); }
+    .error { color: var(--danger); font-family: var(--mono); font-size: 12px; text-align: center; margin-top: 12px; min-height: 18px; }
+    .scanline {
+      position: absolute; top: 0; left: 0; right: 0; height: 2px;
+      background: linear-gradient(90deg, transparent, var(--teal), transparent);
+      animation: scan 3s linear infinite;
+      opacity: .6;
+    }
+    @keyframes scan { 0% { top: 0; } 100% { top: 100%; } }
+
+    /* MAIN */
+    #app { display: none; }
+    #app.show { display: block; }
+    header {
+      padding: 20px 0; border-bottom: 1px solid rgba(240,235,224,.08);
+      position: sticky; top: 0; background: rgba(10,14,12,.92); backdrop-filter: blur(12px); z-index: 50;
+    }
+    .nav { max-width: 1200px; margin: 0 auto; padding: 0 24px; display: flex; justify-content: space-between; align-items: center; }
+    .logo { font-family: var(--mono); font-size: 20px; font-weight: 700; color: var(--paper); text-decoration: none; }
+    .logo span { color: var(--amber); }
+    .logout {
+      background: transparent; border: 1px solid rgba(226,162,58,.4); color: var(--amber);
+      font-family: var(--mono); font-size: 12px; padding: 6px 14px; border-radius: 4px; cursor: pointer;
+    }
+    .logout:hover { background: rgba(226,162,58,.1); }
+    .hero {
+      max-width: 1200px; margin: 0 auto; padding: 60px 24px 40px;
+    }
+    .hero h1 { font-size: clamp(36px, 5vw, 56px); font-weight: 600; letter-spacing: -1px; line-height: 1.1; }
+    .hero h1 em { color: var(--amber); font-style: normal; }
+    .hero p { margin-top: 12px; color: #a8a399; max-width: 520px; }
+    .grid {
+      max-width: 1200px; margin: 0 auto; padding: 20px 24px 80px;
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px;
+    }
+    @media (max-width: 1100px) { .grid { grid-template-columns: repeat(3, 1fr); } }
+    @media (max-width: 780px) { .grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 520px) { .grid { grid-template-columns: 1fr; } }
+    .card {
+      background: linear-gradient(160deg, #141a17, #0d1210);
+      border: 1px solid rgba(61,155,134,.2);
+      border-radius: 12px; overflow: hidden;
+      transition: transform .25s, box-shadow .25s, border-color .25s;
+      position: relative;
+    }
+    .card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 20px 40px rgba(0,0,0,.5), 0 0 0 1px rgba(226,162,58,.3);
+      border-color: rgba(226,162,58,.5);
+    }
+    .card-thumb {
+      height: 140px; background: linear-gradient(135deg, #1a2420, #0f1815);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 42px; color: var(--teal); position: relative; overflow: hidden;
+    }
+    .card-thumb::after {
+      content: ""; position: absolute; inset: 0;
+      background: linear-gradient(45deg, transparent 40%, rgba(226,162,58,.08) 50%, transparent 60%);
+      animation: shine 4s infinite;
+    }
+    @keyframes shine { 0%, 100% { transform: translateX(-100%); } 50% { transform: translateX(100%); } }
+    .card-body { padding: 16px; }
+    .card-tag { font-family: var(--mono); font-size: 10px; color: var(--amber); letter-spacing: 1px; text-transform: uppercase; }
+    .card h3 { margin: 6px 0 8px; font-size: 16px; font-weight: 600; }
+    .card p { font-size: 13px; color: #9a958a; line-height: 1.45; margin-bottom: 14px; }
+    .actions { display: flex; gap: 6px; flex-wrap: wrap; }
+    .actions button, .actions a {
+      flex: 1; min-width: 70px; text-align: center; text-decoration: none;
+      background: rgba(61,155,134,.12); border: 1px solid rgba(61,155,134,.3);
+      color: var(--teal); font-family: var(--mono); font-size: 11px;
+      padding: 7px 4px; border-radius: 4px; cursor: pointer; transition: .15s;
+    }
+    .actions button:hover, .actions a:hover { background: var(--teal); color: #fff; }
+    .actions .primary { background: rgba(226,162,58,.15); border-color: rgba(226,162,58,.4); color: var(--amber); }
+    .actions .primary:hover { background: var(--amber); color: #000; }
+    footer { text-align: center; padding: 30px; font-size: 12px; color: #6a665c; font-family: var(--mono); }
+  </style>
 </head>
 <body>
-  <header>
-    <div class="container nav">
-      <a href="#" class="logo">yaaertu <span>codeR</span></a>
-      <nav>
-        <a href="#projects">Projeler</a>
-        <a href="#about">Hakkında</a>
-        <a href="https://github.com/coderpolys" target="_blank">GitHub</a>
-      </nav>
+  <div id="login">
+    <div class="scanline"></div>
+    <div class="login-box">
+      <div class="glitch">ACCESS TERMINAL</div>
+      <div class="sub">YAAERTU // PROJE VITRINI</div>
+      <div class="field">
+        <label>OPERATOR ID</label>
+        <span class="icon">▸</span>
+        <input id="user" type="text" autocomplete="off" placeholder="caymaz" />
+      </div>
+      <div class="field">
+        <label>ACCESS CODE</label>
+        <span class="icon">◆</span>
+        <input id="pass" type="password" placeholder="••••••••" />
+      </div>
+      <button class="btn-login" onclick="attemptLogin()">AUTHENTICATE</button>
+      <div class="error" id="err"></div>
     </div>
-  </header>
+  </div>
 
-  <main>
+  <div id="app">
+    <header>
+      <div class="nav">
+        <a class="logo" href="#">yaaertu <span>codeR</span></a>
+        <button class="logout" onclick="logout()">LOGOUT</button>
+      </div>
+    </header>
+
     <section class="hero">
-      <div class="container">
-        <h1>Sinematik<br /><em>AI</em> Üretimi.</h1>
-        <p class="lead">
-          yaaMovie açılışları, Poly Desk arayüzleri ve marka sistemleri.<br />
-          Koyu, editorial, mühendislik odaklı.
-        </p>
-        <div class="meta">
-          <span>İstanbul Türkçesi</span>
-          <span>4K · 9:16</span>
-          <span>Photoreal CGI</span>
-        </div>
-      </div>
+      <h1>Proje <em>Vitrini</em></h1>
+      <p>AI sinematik üretimler, marka sistemleri ve uygulama demoları. Modern, detaylı, animasyonlu vitrin.</p>
     </section>
 
-    <section id="projects">
-      <div class="container">
-        <h2>Seçili İşler</h2>
-        <div class="projects">
-          <article class="project">
-            <span class="tag">yaaMovie</span>
-            <h3>Netflix-tarzı Açılış & Logo</h3>
-            <p>Premium sinematik intro animasyonları, "dıdıdın" ses efekti, kesintisiz devamlılık kuralları ve yüksek üretim değeri. Marka kimliği ile bütünleşik.</p>
-          </article>
-
-          <article class="project">
-            <span class="tag">Poly Desk OG</span>
-            <h3>Dark Engineering Console</h3>
-            <p>Grok için tasarlanmış koyu mühendislik arayüzü. Ink #101614, paper #F4EFE4, amber #E2A23A, teal #3D9B86. Serif + mono tipografi, editorial ton.</p>
-          </article>
-
-          <article class="project">
-            <span class="tag">APEX ENERGY</span>
-            <h3>Teknoloji Reklamı</h3>
-            <p>20 saniyelik sinematik reklam. Elektromanyetik jeneratör konsepti, fotoreal CGI, profesyonel Türkçe anlatım. Bilimsel plauzibilite sınırlarına sadık.</p>
-          </article>
-
-          <article class="project">
-            <span class="tag">Game Assets</span>
-            <h3>Karakter & Fantasy Sahneler</h3>
-            <p>Mobile Legends Jawhead kostüm varyasyonları, Firavun + Spider-Man cinematic monologları ve detaylı fantasy görseller.</p>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <section id="about" class="about">
-      <div class="container">
-        <h2>Hakkında</h2>
-        <p>AI destekli içerik üretimi ve marka sistemi geliştirme. Grok üzerinden yüksek detaylı prompt mühendisliği ile sinematik videolar, logo animasyonları ve arayüz tasarımları.</p>
-        <p>Odak: fotorealizm, kesintisiz devamlılık, İstanbul Türkçesi seslendirme ve bilimsel doğruluk. Oyunculuk, mühendislik estetiği ve premium üretim değeri.</p>
-        <p class="credit" style="margin-top: 24px; color: var(--teal);">yaaertu codeR</p>
-      </div>
-    </section>
-  </main>
-
-  <footer>
-    <div class="container">
-      <p>© 2026 yaaertu codeR · Hosted on GitHub Pages</p>
+    <div class="grid" id="grid">
+      <!-- Cards will be injected -->
     </div>
-  </footer>
+
+    <footer>yaaertu codeR · 2026 · Secure Showcase</footer>
+  </div>
+
+  <script>
+    const CORRECT_USER = "caymaz";
+    const CORRECT_PASS = "2288Ertu";
+
+    const projects = [
+      { tag: "yaaMovie", icon: "🎬", title: "Netflix-Style Intro", desc: "Premium cinematic logo animation with dıdıdın SFX and seamless continuity.", demo: "#", install: "#" },
+      { tag: "Poly Desk", icon: "🖥️", title: "Engineering Console", desc: "Dark interface system. Ink / Paper / Amber / Teal palette. Editorial mono + serif.", demo: "#", install: "#" },
+      { tag: "APEX ENERGY", icon: "⚡", title: "Tech Commercial", desc: "20s photoreal CGI ad. Electromagnetic generator concept. Professional Turkish VO.", demo: "#", install: "#" },
+      { tag: "Game", icon: "🎮", title: "Jawhead Costumes", desc: "Mobile Legends character variations and detailed fantasy scene renders.", demo: "#", install: "#" },
+      { tag: "Fantasy", icon: "🔮", title: "Firavun Monologue", desc: "Cinematic Spider-Man + Firavun scene with Turkish atar-style delivery.", demo: "#", install: "#" },
+      { tag: "Brand", icon: "🎭", title: "Logo System", desc: "Full brand assets, animated logos and identity guidelines for yaaMovie.", demo: "#", install: "#" },
+      { tag: "Tool", icon: "🛠️", title: "Prompt Lab", desc: "Internal tool for iterative cinematic prompt refinement and continuity checks.", demo: "#", install: "#" },
+      { tag: "Archive", icon: "📁", title: "Asset Library", desc: "Organized collection of renders, logos, and video masters. Ready for download.", demo: "#", install: "#" },
+      { tag: "Upcoming", icon: "🚀", title: "New Project Slot", desc: "Boş kart. Görsel, demo ve kurulum dosyasını buraya ekleyebilirsin.", demo: "#", install: "#" },
+      { tag: "Upcoming", icon: "💡", title: "Product Card", desc: "Vitrin kartı. Hover animasyonu ve aksiyon butonları hazır.", demo: "#", install: "#" },
+      { tag: "Upcoming", icon: "🌟", title: "Showcase Item", desc: "Modern grid içinde 4 sütunlu düzen. Responsive ve detaylı.", demo: "#", install: "#" },
+      { tag: "Upcoming", icon: "⚙️", title: "Ready Slot", desc: "İçerik, görsel ve dosya eklemek için hazır boş alan.", demo: "#", install: "#" }
+    ];
+
+    function attemptLogin() {
+      const u = document.getElementById("user").value.trim();
+      const p = document.getElementById("pass").value;
+      const err = document.getElementById("err");
+      if (u === CORRECT_USER && p === CORRECT_PASS) {
+        err.textContent = "ACCESS GRANTED";
+        err.style.color = "#3d9b86";
+        setTimeout(() => {
+          document.getElementById("login").classList.add("hidden");
+          document.getElementById("app").classList.add("show");
+          sessionStorage.setItem("yaa_auth", "1");
+          renderGrid();
+        }, 600);
+      } else {
+        err.textContent = "INVALID CREDENTIALS";
+        err.style.color = "#e85d4c";
+        document.querySelector(".login-box").style.animation = "none";
+        setTimeout(() => document.querySelector(".login-box").style.animation = "glitch 0.3s", 10);
+      }
+    }
+
+    function logout() {
+      sessionStorage.removeItem("yaa_auth");
+      document.getElementById("app").classList.remove("show");
+      document.getElementById("login").classList.remove("hidden");
+      document.getElementById("user").value = "";
+      document.getElementById("pass").value = "";
+      document.getElementById("err").textContent = "";
+    }
+
+    function renderGrid() {
+      const grid = document.getElementById("grid");
+      grid.innerHTML = projects.map(p => `
+        <article class="card">
+          <div class="card-thumb">${p.icon}</div>
+          <div class="card-body">
+            <div class="card-tag">${p.tag}</div>
+            <h3>${p.title}</h3>
+            <p>${p.desc}</p>
+            <div class="actions">
+              <a href="${p.demo}" class="primary" target="_blank">DEMO</a>
+              <a href="${p.install}" target="_blank">KURULUM</a>
+              <button onclick="alert('Detay ve görsel ekleme yakında.')">DETAY</button>
+            </div>
+          </div>
+        </article>
+      `).join("");
+    }
+
+    // Enter key support
+    document.getElementById("pass").addEventListener("keydown", e => { if (e.key === "Enter") attemptLogin(); });
+    document.getElementById("user").addEventListener("keydown", e => { if (e.key === "Enter") document.getElementById("pass").focus(); });
+
+    // Auto-login if session exists
+    if (sessionStorage.getItem("yaa_auth") === "1") {
+      document.getElementById("login").classList.add("hidden");
+      document.getElementById("app").classList.add("show");
+      renderGrid();
+    }
+  </script>
 </body>
 </html>
